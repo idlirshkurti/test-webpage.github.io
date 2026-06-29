@@ -1,0 +1,657 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Idlir Shkurti — Data Scientist</title>
+  <meta name="description" content="Personal site of Idlir Shkurti, Data Scientist based in Berlin. Notes on ML, maths, Python and personal projects." />
+
+  <!-- Fonts -->
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=zodiak@400,700&display=swap" rel="stylesheet">
+
+  <style>
+    /* === DESIGN TOKENS === */
+    :root, [data-theme="light"] {
+      --color-bg:              #f7f6f2;
+      --color-surface:         #f9f8f5;
+      --color-surface-2:       #fbfbf9;
+      --color-surface-offset:  #f0ede8;
+      --color-divider:         #dcd9d5;
+      --color-border:          #d4d1ca;
+      --color-text:            #28251d;
+      --color-text-muted:      #6b6a66;
+      --color-text-faint:      #b0afa9;
+      --color-primary:         #01696f;
+      --color-primary-hover:   #0c4e54;
+      --color-primary-highlight: #cedcd8;
+      --shadow-sm: 0 1px 3px oklch(0.2 0.01 80 / 0.07);
+      --shadow-md: 0 4px 16px oklch(0.2 0.01 80 / 0.08);
+      --radius-sm: 0.375rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+      --radius-full: 9999px;
+      --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem;
+      --space-4: 1rem;    --space-5: 1.25rem; --space-6: 1.5rem;
+      --space-8: 2rem;    --space-10: 2.5rem; --space-12: 3rem;
+      --space-16: 4rem;   --space-20: 5rem;   --space-24: 6rem;
+      --text-xs:   clamp(0.75rem,  0.7rem  + 0.25vw, 0.875rem);
+      --text-sm:   clamp(0.875rem, 0.8rem  + 0.35vw, 1rem);
+      --text-base: clamp(1rem,     0.95rem + 0.25vw, 1.125rem);
+      --text-lg:   clamp(1.125rem, 1rem    + 0.75vw, 1.5rem);
+      --text-xl:   clamp(1.5rem,   1.2rem  + 1.25vw, 2.25rem);
+      --text-2xl:  clamp(2rem,     1.2rem  + 2.5vw,  3.5rem);
+      --text-3xl:  clamp(2.5rem,   1rem    + 4vw,    5rem);
+      --font-display: 'Zodiak', Georgia, serif;
+      --font-body:    'Satoshi', 'Helvetica Neue', sans-serif;
+      --transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+      --content-narrow: 640px;
+      --content-default: 960px;
+    }
+
+    [data-theme="dark"] {
+      --color-bg:              #171614;
+      --color-surface:         #1c1b19;
+      --color-surface-2:       #201f1d;
+      --color-surface-offset:  #1d1c1a;
+      --color-divider:         #262523;
+      --color-border:          #393836;
+      --color-text:            #cdccca;
+      --color-text-muted:      #797876;
+      --color-text-faint:      #5a5957;
+      --color-primary:         #4f98a3;
+      --color-primary-hover:   #227f8b;
+      --color-primary-highlight: #313b3b;
+      --shadow-sm: 0 1px 3px oklch(0 0 0 / 0.25);
+      --shadow-md: 0 4px 16px oklch(0 0 0 / 0.35);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme]) {
+        --color-bg: #171614; --color-surface: #1c1b19; --color-surface-2: #201f1d;
+        --color-surface-offset: #1d1c1a; --color-divider: #262523; --color-border: #393836;
+        --color-text: #cdccca; --color-text-muted: #797876; --color-text-faint: #5a5957;
+        --color-primary: #4f98a3; --color-primary-hover: #227f8b;
+        --color-primary-highlight: #313b3b;
+        --shadow-sm: 0 1px 3px oklch(0 0 0 / 0.25); --shadow-md: 0 4px 16px oklch(0 0 0 / 0.35);
+      }
+    }
+
+    /* === BASE === */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html {
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      scroll-behavior: smooth;
+      scroll-padding-top: var(--space-16);
+    }
+    body {
+      min-height: 100dvh;
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      color: var(--color-text);
+      background: var(--color-bg);
+      line-height: 1.65;
+    }
+    img { display: block; max-width: 100%; height: auto; }
+    h1, h2, h3 { text-wrap: balance; line-height: 1.15; }
+    p, li { text-wrap: pretty; }
+    a { color: var(--color-primary); text-decoration: none; transition: color var(--transition); }
+    a:hover { color: var(--color-primary-hover); }
+    :focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; border-radius: var(--radius-sm); }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+    /* === LAYOUT === */
+    .container {
+      max-width: var(--content-default);
+      margin-inline: auto;
+      padding-inline: clamp(var(--space-4), 5vw, var(--space-12));
+    }
+    .container--narrow {
+      max-width: var(--content-narrow);
+      margin-inline: auto;
+      padding-inline: clamp(var(--space-4), 5vw, var(--space-12));
+    }
+
+    /* === NAV === */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: oklch(from var(--color-bg) l c h / 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--color-divider);
+    }
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+    .nav__logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-family: var(--font-display);
+      font-size: var(--text-base);
+      font-weight: 700;
+      color: var(--color-text);
+      text-decoration: none;
+    }
+    .nav__logo svg { flex-shrink: 0; }
+    .nav__links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-6);
+      list-style: none;
+    }
+    .nav__links a {
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--color-text-muted);
+      transition: color var(--transition);
+    }
+    .nav__links a:hover { color: var(--color-text); }
+    .nav__right { display: flex; align-items: center; gap: var(--space-3); }
+    .theme-toggle {
+      display: flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      color: var(--color-text-muted);
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition), border-color var(--transition);
+    }
+    .theme-toggle:hover { background: var(--color-surface-offset); color: var(--color-text); }
+
+    /* === HERO === */
+    .hero {
+      padding-block: clamp(var(--space-16), 10vw, var(--space-24));
+      border-bottom: 1px solid var(--color-divider);
+    }
+    .hero__eyebrow {
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--color-primary);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-4);
+    }
+    .hero__title {
+      font-family: var(--font-display);
+      font-size: var(--text-3xl);
+      font-weight: 700;
+      color: var(--color-text);
+      margin-bottom: var(--space-6);
+      max-width: 14ch;
+    }
+    .hero__title em {
+      font-style: italic;
+      color: var(--color-primary);
+    }
+    .hero__bio {
+      font-size: var(--text-lg);
+      color: var(--color-text-muted);
+      max-width: 56ch;
+      margin-bottom: var(--space-8);
+      line-height: 1.7;
+    }
+    .hero__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      align-items: center;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-5);
+      border-radius: var(--radius-md);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition), box-shadow var(--transition);
+      text-decoration: none;
+      border: none;
+    }
+    .btn--primary {
+      background: var(--color-primary);
+      color: #fff;
+    }
+    .btn--primary:hover {
+      background: var(--color-primary-hover);
+      color: #fff;
+      box-shadow: var(--shadow-md);
+    }
+    .btn--ghost {
+      background: transparent;
+      color: var(--color-text-muted);
+      border: 1px solid var(--color-border);
+    }
+    .btn--ghost:hover {
+      background: var(--color-surface-offset);
+      color: var(--color-text);
+    }
+
+    /* === SECTION WRAPPER === */
+    .section {
+      padding-block: clamp(var(--space-12), 8vw, var(--space-20));
+    }
+    .section + .section {
+      border-top: 1px solid var(--color-divider);
+    }
+    .section__label {
+      font-size: var(--text-xs);
+      font-weight: 600;
+      color: var(--color-text-faint);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-8);
+    }
+    .section__heading {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      font-weight: 700;
+      color: var(--color-text);
+      margin-bottom: var(--space-4);
+    }
+    .section__subtext {
+      font-size: var(--text-base);
+      color: var(--color-text-muted);
+      max-width: 60ch;
+      margin-bottom: var(--space-10);
+      line-height: 1.7;
+    }
+
+    /* === ABOUT === */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-12);
+      align-items: start;
+    }
+    .about__text p {
+      font-size: var(--text-base);
+      color: var(--color-text-muted);
+      line-height: 1.75;
+      max-width: 60ch;
+    }
+    .about__text p + p { margin-top: var(--space-4); }
+    .about__interests {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+    .interest-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-3) var(--space-4);
+      background: var(--color-surface);
+      border: 1px solid oklch(from var(--color-text) l c h / 0.07);
+      border-radius: var(--radius-lg);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--color-text-muted);
+    }
+    .interest-dot {
+      width: 8px; height: 8px;
+      border-radius: var(--radius-full);
+      background: var(--color-primary);
+      flex-shrink: 0;
+    }
+
+    /* === PROJECTS === */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+      gap: var(--space-5);
+    }
+    .project-card {
+      background: var(--color-surface);
+      border: 1px solid oklch(from var(--color-text) l c h / 0.08);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      transition: box-shadow var(--transition), transform var(--transition);
+    }
+    .project-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+    .project-card__tag {
+      display: inline-flex;
+      align-items: center;
+      padding: var(--space-1) var(--space-3);
+      background: var(--color-primary-highlight);
+      color: var(--color-primary);
+      border-radius: var(--radius-full);
+      font-size: var(--text-xs);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      width: fit-content;
+    }
+    .project-card__title {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      font-weight: 700;
+      color: var(--color-text);
+      line-height: 1.25;
+    }
+    .project-card__desc {
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+      line-height: 1.65;
+      flex: 1;
+    }
+    .project-card__link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--color-primary);
+      margin-top: auto;
+    }
+    .project-card__link:hover { color: var(--color-primary-hover); }
+    .project-card__link svg { transition: transform var(--transition); }
+    .project-card__link:hover svg { transform: translateX(3px); }
+
+    /* === WRITING === */
+    .writing-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .writing-item {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-4);
+      padding-block: var(--space-5);
+      border-bottom: 1px solid var(--color-divider);
+      text-decoration: none;
+      transition: background var(--transition);
+    }
+    .writing-item:first-child { border-top: 1px solid var(--color-divider); }
+    .writing-item:hover .writing-item__title { color: var(--color-primary); }
+    .writing-item__title {
+      font-size: var(--text-base);
+      font-weight: 600;
+      color: var(--color-text);
+      transition: color var(--transition);
+    }
+    .writing-item__meta {
+      font-size: var(--text-xs);
+      color: var(--color-text-faint);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* === FOOTER === */
+    .footer {
+      border-top: 1px solid var(--color-divider);
+      padding-block: var(--space-8);
+    }
+    .footer__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+    }
+    .footer__copy {
+      font-size: var(--text-xs);
+      color: var(--color-text-faint);
+    }
+    .footer__links {
+      display: flex;
+      gap: var(--space-4);
+      list-style: none;
+    }
+    .footer__links a {
+      font-size: var(--text-xs);
+      color: var(--color-text-faint);
+      transition: color var(--transition);
+    }
+    .footer__links a:hover { color: var(--color-text-muted); }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 768px) {
+      .nav__links { display: none; }
+      .about-grid { grid-template-columns: 1fr; }
+      .hero__title { max-width: none; }
+      .footer__inner { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 480px) {
+      .projects-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Skip link -->
+  <a href="#main" class="sr-only">Skip to content</a>
+
+  <!-- NAV -->
+  <nav class="nav" aria-label="Main navigation">
+    <div class="container">
+      <div class="nav__inner">
+        <a href="#" class="nav__logo" aria-label="Idlir Shkurti home">
+          <!-- SVG Logo: minimal monogram IS -->
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+            <rect width="28" height="28" rx="7" fill="var(--color-primary)"/>
+            <text x="7" y="20" font-family="Georgia, serif" font-size="14" font-weight="700" fill="#fff">IS</text>
+          </svg>
+          <span>Idlir Shkurti</span>
+        </a>
+        <ul class="nav__links" role="list">
+          <li><a href="#about">About</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#writing">Writing</a></li>
+          <li><a href="https://idlirshkurti.github.io" target="_blank" rel="noopener noreferrer">Blog</a></li>
+        </ul>
+        <div class="nav__right">
+          <button class="theme-toggle" data-theme-toggle aria-label="Switch to dark mode">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container">
+        <p class="hero__eyebrow">Data Scientist · Berlin</p>
+        <h1 class="hero__title">Maths, data &amp; <em>curious ideas</em></h1>
+        <p class="hero__bio">Hi, I'm Idlir. I build ML systems, explore probabilistic models, and write notes on data science, Python, and whatever else catches my attention — from causal inference to Fantasy Football.</p>
+        <div class="hero__actions">
+          <a href="https://github.com/idlirshkurti" class="btn btn--primary" target="_blank" rel="noopener noreferrer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            GitHub
+          </a>
+          <a href="https://www.linkedin.com/in/idlir-shkurti/" class="btn btn--ghost" target="_blank" rel="noopener noreferrer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://idlirshkurti.github.io" class="btn btn--ghost" target="_blank" rel="noopener noreferrer">Blog →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section" id="about">
+      <div class="container">
+        <p class="section__label">About</p>
+        <div class="about-grid">
+          <div class="about__text">
+            <h2 class="section__heading">Building things with data</h2>
+            <p>I'm a data scientist based in Berlin with a deep interest in probabilistic modelling, machine learning systems, and the maths underneath it all. I work on everything from Bayesian methods and causal inference to LLM agents and time-series forecasting.</p>
+            <p>Outside of work I play tennis, follow football obsessively (yes, including FPL), and enjoy turning random ideas into small projects that teach me something new.</p>
+          </div>
+          <div class="about__interests" role="list" aria-label="Interests">
+            <div class="interest-item" role="listitem"><span class="interest-dot"></span>Probabilistic &amp; Bayesian modelling</div>
+            <div class="interest-item" role="listitem"><span class="interest-dot"></span>LLM agents &amp; evaluation</div>
+            <div class="interest-item" role="listitem"><span class="interest-dot"></span>Causal inference</div>
+            <div class="interest-item" role="listitem"><span class="interest-dot"></span>Time-series forecasting</div>
+            <div class="interest-item" role="listitem"><span class="interest-dot"></span>Reinforcement learning</div>
+            <div class="interest-item" role="listitem"><span class="interest-dot"></span>Football &amp; Fantasy Premier League</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section class="section" id="projects">
+      <div class="container">
+        <p class="section__label">Projects</p>
+        <h2 class="section__heading">Selected work</h2>
+        <p class="section__subtext">A mix of research explorations, tools, and side projects. Full write-ups live on the blog.</p>
+        <div class="projects-grid">
+
+          <article class="project-card">
+            <span class="project-card__tag">Bayesian ML</span>
+            <h3 class="project-card__title">Dirichlet Process Mixture Models</h3>
+            <p class="project-card__desc">Non-parametric clustering using DPMMs — letting the data decide the number of clusters through a Bayesian prior over infinite mixtures.</p>
+            <a href="https://idlirshkurti.github.io/projects/dpmm" class="project-card__link" target="_blank" rel="noopener noreferrer">
+              Read more
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </article>
+
+          <article class="project-card">
+            <span class="project-card__tag">Causal Inference</span>
+            <h3 class="project-card__title">Causal Inference Methods</h3>
+            <p class="project-card__desc">Exploring do-calculus, propensity score matching, and structural causal models — moving beyond correlation to understand intervention effects.</p>
+            <a href="https://idlirshkurti.github.io/projects/causal_inference" class="project-card__link" target="_blank" rel="noopener noreferrer">
+              Read more
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </article>
+
+          <article class="project-card">
+            <span class="project-card__tag">Reinforcement Learning</span>
+            <h3 class="project-card__title">RL Explorations</h3>
+            <p class="project-card__desc">Hands-on experiments with policy gradient methods, Q-learning, and environment design — learning by doing with classic and custom environments.</p>
+            <a href="https://idlirshkurti.github.io/projects/rl" class="project-card__link" target="_blank" rel="noopener noreferrer">
+              Read more
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </article>
+
+          <article class="project-card">
+            <span class="project-card__tag">LLMs</span>
+            <h3 class="project-card__title">LLM Scraper &amp; Orchestrator</h3>
+            <p class="project-card__desc">A Python toolkit for running LLM agents with multi-hop reasoning, customisable toolsets, and support for OpenAI, Cohere, and other providers.</p>
+            <a href="https://github.com/idlirshkurti/LLM-Orchestrator" class="project-card__link" target="_blank" rel="noopener noreferrer">
+              View on GitHub
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </article>
+
+          <article class="project-card">
+            <span class="project-card__tag">Forecasting</span>
+            <h3 class="project-card__title">Energy Forecasting</h3>
+            <p class="project-card__desc">Time-series models for energy demand prediction — comparing classical approaches (ARIMA, Prophet) against modern deep learning methods.</p>
+            <a href="https://idlirshkurti.github.io/projects/energy_forecast" class="project-card__link" target="_blank" rel="noopener noreferrer">
+              Read more
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </article>
+
+          <article class="project-card">
+            <span class="project-card__tag">Probability</span>
+            <h3 class="project-card__title">Tennis Scoring Probability</h3>
+            <p class="project-card__desc">Deriving closed-form probabilities for winning a tennis match from first principles — given a point win probability, what's the chance of winning a set? A match?</p>
+            <a href="https://idlirshkurti.github.io/projects/tennis_scoring_probability" class="project-card__link" target="_blank" rel="noopener noreferrer">
+              Read more
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- WRITING -->
+    <section class="section" id="writing">
+      <div class="container--narrow">
+        <p class="section__label">Writing</p>
+        <h2 class="section__heading">Notes &amp; tutorials</h2>
+        <p class="section__subtext">Random notes on data science, maths, Python, and personal projects. None of it should be taken too seriously.</p>
+        <div class="writing-list">
+          <a href="https://idlirshkurti.github.io/projects/abm" class="writing-item" target="_blank" rel="noopener noreferrer">
+            <span class="writing-item__title">Agent-Based Modelling</span>
+            <span class="writing-item__meta">Projects</span>
+          </a>
+          <a href="https://idlirshkurti.github.io/projects/fpl_python_intro" class="writing-item" target="_blank" rel="noopener noreferrer">
+            <span class="writing-item__title">FPL with Python — an introduction</span>
+            <span class="writing-item__meta">Projects</span>
+          </a>
+          <a href="https://idlirshkurti.github.io/projects/fantasy_bball" class="writing-item" target="_blank" rel="noopener noreferrer">
+            <span class="writing-item__title">Fantasy Basketball Analytics</span>
+            <span class="writing-item__meta">Projects</span>
+          </a>
+          <a href="https://idlirshkurti.github.io/projects/time_series" class="writing-item" target="_blank" rel="noopener noreferrer">
+            <span class="writing-item__title">Time Series Forecasting Notes</span>
+            <span class="writing-item__meta">Projects</span>
+          </a>
+          <a href="https://idlirshkurti.github.io" class="writing-item" target="_blank" rel="noopener noreferrer">
+            <span class="writing-item__title">All posts on the blog →</span>
+            <span class="writing-item__meta">idlirshkurti.github.io</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__inner">
+        <p class="footer__copy">© 2026 Idlir Shkurti · Berlin</p>
+        <ul class="footer__links" role="list">
+          <li><a href="https://github.com/idlirshkurti" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/idlir-shkurti/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+          <li><a href="https://idlirshkurti.github.io" target="_blank" rel="noopener noreferrer">Blog</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const t = document.querySelector('[data-theme-toggle]');
+      const r = document.documentElement;
+      let d = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      r.setAttribute('data-theme', d);
+      if (t) {
+        t.innerHTML = d === 'dark'
+          ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
+          : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+        t.setAttribute('aria-label', 'Switch to ' + (d === 'dark' ? 'light' : 'dark') + ' mode');
+        t.addEventListener('click', () => {
+          d = d === 'dark' ? 'light' : 'dark';
+          r.setAttribute('data-theme', d);
+          t.setAttribute('aria-label', 'Switch to ' + (d === 'dark' ? 'light' : 'dark') + ' mode');
+          t.innerHTML = d === 'dark'
+            ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
+            : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+        });
+      }
+    })();
+  </script>
+
+</body>
+</html>
